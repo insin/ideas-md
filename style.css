@@ -78,3 +78,6 @@ footer a {
 .Section h2:hover .Section__remove {
   opacity: .25;
 }
+.Section__remove:focus {
+  opacity: .25;
+}
