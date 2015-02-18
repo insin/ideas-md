@@ -250,6 +250,7 @@ var Ideas = React.createClass({
         className="Ideas__general"
         html={this.state.general}
         onBlur={this._onBlur}
+        placeholder="[general]"
       />
       <div className="Ideas__sections">
         <a className="Ideas__add circleButton"
