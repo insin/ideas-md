@@ -19,6 +19,8 @@ function assign(dest) {
 
 // ========================================================= ContentEditable ===
 
+var isIE = 'ActiveXObject' in window
+
 // Chrome 40 not wrapping first line when wrapping with block elements
 var initialBreaks = /^([^<]+)(?:<div[^>]*><br[^>]*><\/div><div[^>]*>|<p[^>]*><br[^>]*><\/p><p[^>]*>)/
 var initialBreak = /^([^<]+)(?:<div[^>]*>|<p[^>]*>)/
@@ -33,7 +35,7 @@ var newlines = /\n/g
 var trimWhitespace = /^(?:\s|&nbsp;|<br[^>]*>)*|(?:\s|&nbsp;|<br[^>]*>)*$/g
 
 // IE11 displays 2 lines on initial display with the inner <br> present
-var DEFAULT_CONTENTEDITABLE_HTML = 'ActiveXObject' in window ? '<div></div>' : '<div><br></div>'
+var DEFAULT_CONTENTEDITABLE_HTML = isIE ? '<div>&nbsp;</div>' : '<div><br></div>'
 
 /**
  * Normalises contentEditable innerHTML, stripping all tags except <br> and
@@ -94,7 +96,9 @@ var ContentEditable = React.createClass({
   _onFocus(e) {
     var {target} = e
     var selecting = false
-    if (this.props.placeholder && target.innerHTML == this.props.placeholder) {
+    var html = target.innerHTML
+    if (isIE && html == DEFAULT_CONTENTEDITABLE_HTML ||
+        this.props.placeholder && html == this.props.placeholder) {
       setTimeout(function() {
         var range
         if (window.getSelection && document.createRange) {
@@ -120,7 +124,7 @@ var ContentEditable = React.createClass({
   _onKeyDown(e) {
     // Prevent the default contents from being deleted, which can make the
     // contentEditable unselectable.
-    if ((e.key == 'Backspace' || e.key == 'Delete') &&
+    if (!isIE && (e.key == 'Backspace' || e.key == 'Delete') &&
         e.target.innerHTML == DEFAULT_CONTENTEDITABLE_HTML) {
       e.preventDefault()
     }
