@@ -17,13 +17,13 @@ footer a {
   color: inherit;
 }
 
-.ContentEditable {
+.PlainEditable {
   box-sizing: border-box;
 }
-.ContentEditable p {
+.PlainEditable p {
   margin: 0;
 }
-.ContentEditable:hover {
+.PlainEditable:hover {
   outline: 1px solid #444;
 }
 

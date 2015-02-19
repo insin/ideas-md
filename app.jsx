@@ -27,134 +27,6 @@ function joinClassNames() {
   return classNames.join(' ')
 }
 
-// ========================================================= ContentEditable ===
-
-var isIE = 'ActiveXObject' in window
-
-// Chrome 40 not wrapping first line when wrapping with block elements
-var initialBreaks = /^([^<]+)(?:<div[^>]*><br[^>]*><\/div><div[^>]*>|<p[^>]*><br[^>]*><\/p><p[^>]*>)/
-var initialBreak = /^([^<]+)(?:<div[^>]*>|<p[^>]*>)/
-
-var wrappedBreaks = /<p[^>]*><br[^>]*><\/p>|<div[^>]*><br[^>]*><\/div>/g
-var openBreaks = /<(?:p|div)[^>]*>/g
-var breaks = /<br[^>]*><\/(?:p|div)>|<br[^>]*>|<\/(?:p|div)>/g
-var allTags = /<\/?[^>]+>\s*/g
-var newlines = /\n/g
-
-// Leading and trailing whitespace, <br>s & &nbsp;s
-var trimWhitespace = /^(?:\s|&nbsp;|<br[^>]*>)*|(?:\s|&nbsp;|<br[^>]*>)*$/g
-
-// IE11 displays 2 lines on initial display with the inner <br> present
-var DEFAULT_CONTENTEDITABLE_HTML = isIE ? '<div>&nbsp;</div>' : '<div><br></div>'
-
-/**
- * Normalises contentEditable innerHTML, stripping all tags except <br> and
- * trimming leading and trailing whitespace and causes of whitespace. The
- * resulting normalised HTML uses <br> for linebreaks.
- */
-function normaliseContentEditableHTML(html) {
-  var html = html.replace(initialBreaks, '$1\n\n')
-                 .replace(initialBreak, '$1\n')
-                 .replace(wrappedBreaks, '\n')
-                 .replace(openBreaks, '')
-                 .replace(breaks, '\n')
-                 .replace(allTags, '')
-                 .replace(newlines, '<br>')
-                 .replace(trimWhitespace, '')
-  return html || DEFAULT_CONTENTEDITABLE_HTML
-}
-
-var ContentEditable = React.createClass({
-  propTypes: {
-    html: React.PropTypes.string.isRequired,
-
-    className: React.PropTypes.string,
-    component: React.PropTypes.any,
-    onBlur: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    onFocus: React.PropTypes.func,
-    onKeyDown: React.PropTypes.func,
-    placeholder: React.PropTypes.string
-  },
-
-  getDefaultProps() {
-    return {
-      component: 'div',
-      placeholder: '',
-      spellCheck: 'false'
-    }
-  },
-
-  _onBlur(e) {
-    var html = normaliseContentEditableHTML(e.target.innerHTML)
-    this.props.onBlur(e, html)
-  },
-
-  _onInput(e) {
-    var html = normaliseContentEditableHTML(e.target.innerHTML)
-    this.props.onChange(e, html)
-  },
-
-  _onFocus(e) {
-    var {target} = e
-    var selecting = false
-    var html = target.innerHTML
-    if (isIE && html == DEFAULT_CONTENTEDITABLE_HTML ||
-        this.props.placeholder && html == this.props.placeholder) {
-      setTimeout(function() {
-        var range
-        if (window.getSelection && document.createRange) {
-          range = document.createRange()
-          range.selectNodeContents(target)
-          var selection = window.getSelection()
-          selection.removeAllRanges()
-          selection.addRange(range)
-        }
-        else if (document.body.createTextRange) {
-          range = document.body.createTextRange()
-          range.moveToElementText(target)
-          range.select()
-        }
-      }, 1)
-      selecting = true
-    }
-    if (this.props.onFocus) {
-      this.props.onFocus(e, selecting)
-    }
-  },
-
-  _onKeyDown(e) {
-    // Prevent the default contents from being deleted, which can make the
-    // contentEditable unselectable.
-    if (!isIE && (e.key == 'Backspace' || e.key == 'Delete') &&
-        e.target.innerHTML == DEFAULT_CONTENTEDITABLE_HTML) {
-      e.preventDefault()
-    }
-    if (this.props.onKeyDown) {
-      this.props.onKeyDown(e)
-    }
-  },
-
-  render() {
-    var {
-      html,
-      className, component, onBlur, onChange, onFocus, onKeyDown, placeholder, spellCheck,
-      ...props
-    } = this.props
-    return <this.props.component
-      {...props}
-      className={joinClassNames('ContentEditable', className)}
-      contentEditable
-      dangerouslySetInnerHTML={{__html: html}}
-      onBlur={onBlur && this._onBlur}
-      onInput={onChange && this._onInput}
-      onFocus={(onFocus || placeholder) && this._onFocus}
-      onKeyDown={this._onKeyDown}
-      spellCheck={spellCheck}
-    />
-  }
-})
-
 // =================================================================== Store ===
 
 // Section ids are re-assigned by index on load - we just need to ensure they're
@@ -248,7 +120,7 @@ var Ideas = React.createClass({
 
   render() {
     return <div className="Ideas">
-      <ContentEditable
+      <PlainEditable
         className="Ideas__general"
         html={this.state.general}
         onBlur={this._onBlur}
@@ -267,7 +139,7 @@ var Ideas = React.createClass({
           onChange={this._onSectionChange}
         />)}
       </div>
-      <footer>ideas-md 0.1 | <a href="https://github.com/insin/ideas-md">insin/ideas-md</a></footer>
+      <footer>ideas-md 0.2 | <a href="https://github.com/insin/ideas-md">insin/ideas-md</a></footer>
     </div>
   }
 })
@@ -297,7 +169,7 @@ var Section = React.createClass({
   render() {
     return <div className="Section">
       <h2>
-        <ContentEditable
+        <PlainEditable
           className="Section__name"
           data-field="section"
           html={this.props.section}
@@ -311,7 +183,7 @@ var Section = React.createClass({
           &mdash;
         </Button>
       </h2>
-      <ContentEditable
+      <PlainEditable
         className="Section__ideas"
         contentEditable="true"
         data-field="ideas"
