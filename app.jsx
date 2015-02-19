@@ -17,6 +17,16 @@ function assign(dest) {
   return dest
 }
 
+function joinClassNames() {
+  var classNames = []
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    if (arguments[i]) {
+      classNames.push(arguments[i])
+    }
+  }
+  return classNames.join(' ')
+}
+
 // ========================================================= ContentEditable ===
 
 var isIE = 'ActiveXObject' in window
@@ -73,14 +83,6 @@ var ContentEditable = React.createClass({
       placeholder: '',
       spellCheck: 'false'
     }
-  },
-
-  _getClassName() {
-    var className = 'ContentEditable'
-    if (this.props.className) {
-      className += ' ' + this.props.className
-    }
-    return className
   },
 
   _onBlur(e) {
@@ -141,7 +143,7 @@ var ContentEditable = React.createClass({
     } = this.props
     return <this.props.component
       {...props}
-      className={this._getClassName()}
+      className={joinClassNames('ContentEditable', className)}
       contentEditable
       dangerouslySetInnerHTML={{__html: html}}
       onBlur={onBlur && this._onBlur}
@@ -253,12 +255,11 @@ var Ideas = React.createClass({
         placeholder="[general]"
       />
       <div className="Ideas__sections">
-        <a className="Ideas__add circleButton"
-           onClick={this._addSection}
-           tabIndex="0"
-           title="Add section">
+        <Button className="Ideas__add"
+                onClick={this._addSection}
+                title="Add section">
           +
-        </a>
+        </Button>
         {this.state.sections.map((section, i) => <Section
           {...section}
           index={i}
@@ -304,12 +305,11 @@ var Section = React.createClass({
           onKeyDown={this._onKeyDown}
           placeholder="[section]"
         />
-        <a className="Section__remove circleButton"
-           onClick={this._onRemove}
-           tabIndex="0"
-           title="Remove section">
+        <Button className="Section__remove"
+                      onClick={this._onRemove}
+                      title="Remove section">
           &mdash;
-        </a>
+        </Button>
       </h2>
       <ContentEditable
         className="Section__ideas"
@@ -320,6 +320,47 @@ var Section = React.createClass({
         placeholder="[ideas]"
       />
     </div>
+  }
+})
+
+var Button = React.createClass({
+  propTypes: {
+    onClick: React.PropTypes.func.isRequired,
+
+    className: React.PropTypes.string,
+    tabIndex: React.PropTypes.string
+  },
+
+  getDefaultProps() {
+    return {
+      tabIndex: '0'
+    }
+  },
+
+  _onClick(e) {
+    this.props.onClick(e)
+  },
+
+  _onKeyPress(e) {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.props.onClick(e)
+    }
+  },
+
+  render() {
+    var {
+      onClick,
+      className, tabIndex,
+      ...props
+    } = this.props
+    return <span className={joinClassNames('Button', className)}
+                 onClick={this._onClick}
+                 onKeyPress={this._onKeyPress}
+                 role="button"
+                 tabIndex={tabIndex}
+                 {...props}>
+      {this.props.children}
+    </span>
   }
 })
 

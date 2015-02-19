@@ -27,7 +27,7 @@ footer a {
   outline: 1px solid #444;
 }
 
-.circleButton {
+.Button {
   border-radius: 50%;
   border: 1px solid #f8f8f2;
   boz-sizing: border-box;
@@ -40,7 +40,7 @@ footer a {
   transition: all .333s;
   width: 32px;
 }
-.circleButton:hover {
+.Button:hover {
   opacity: 1 !important;
 }
 
