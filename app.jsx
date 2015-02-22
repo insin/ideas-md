@@ -27,6 +27,23 @@ function joinClassNames() {
   return classNames.join(' ')
 }
 
+var trim = (() => {
+  var trimRE = /^\s+|\s+$/
+  return (text) => text ? text.replace(trimRE, '') : ''
+})()
+
+var escapeHTML = (() => {
+  var escapeRE = /[&><]/g
+  var escapes = {'&': '&amp;', '>': '&gt;', '<': '&lt;'}
+  var escaper = (match) => escapes[match]
+  return (text) => text.replace(escapeRE, escaper)
+})()
+
+var linebreaksToBr = (() => {
+  var linebreaksRE = /\r\n|\r|\n/g
+  return (text) => text.replace(linebreaksRE, '<br>')
+})()
+
 // =================================================================== Store ===
 
 // Section ids are re-assigned by index on load - we just need to ensure they're
@@ -67,6 +84,18 @@ var IdeasStore = {
     return {general, sections}
   },
 
+  import(state) {
+    this.general = linebreaksToBr(escapeHTML(state.general))
+    this.sections = state.sections.map(section => {
+      section.id = ID_SEED++
+      section.ideas = linebreaksToBr(escapeHTML(section.ideas))
+      return section
+    })
+    saveGeneral(this.general)
+    saveSections(this.sections)
+    this.notifyChange()
+  },
+
   editGeneral(general) {
     this.general = general
     saveGeneral(this.general)
@@ -97,7 +126,30 @@ var IdeasStore = {
   }
 }
 
+var underlineHeadingsRE = /^([^\n]+)\n={2,}\n+/gm
+var hashHeadingsRE = /^##([^#][^\n]*)/gm
+
+function parseFileContents(text) {
+  var parts
+  if (underlineHeadingsRE.test(text)) {
+    parts = text.split(underlineHeadingsRE)
+  }
+  else if (hashHeadingsRE.test(text)) {
+    parts = text.split(hashHeadingsRE)
+  }
+  var general = trim(parts[0])
+  var sections = []
+  for (var i = 1; i < parts.length; i += 2) {
+    var section = trim(parts[i])
+    var ideas = trim(parts[i + 1])
+    sections.push({section, ideas})
+  }
+  return {general, sections}
+}
+
 // ============================================================== Components ===
+
+var hasFileReader = 'FileReader' in window
 
 var Ideas = React.createClass({
   getInitialState() {
@@ -108,6 +160,15 @@ var Ideas = React.createClass({
     IdeasStore.notifyChange = () => {
       this.setState(IdeasStore.get())
     }
+    if (hasFileReader) {
+      document.addEventListener('drop', this._onDrop)
+    }
+  },
+
+  componentWillUnmount() {
+    if (hasFileReader) {
+      document.removeEventListener('drop', this._onDrop)
+    }
   },
 
   _addSection(e) {
@@ -116,6 +177,22 @@ var Ideas = React.createClass({
 
   _onBlur(e, html) {
     IdeasStore.editGeneral(html)
+  },
+
+  _onDrop(e) {
+    e.preventDefault()
+
+    if (!e.dataTransfer.files || !e.dataTransfer.files[0]) {
+      return
+    }
+
+    var reader = new FileReader()
+    reader.onload = (e) => {
+      var text = e.target.result
+      var state = parseFileContents(text)
+      IdeasStore.import(state)
+    }
+    reader.readAsText(e.dataTransfer.files[0])
   },
 
   render() {
