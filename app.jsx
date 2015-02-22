@@ -214,7 +214,7 @@ var Button = React.createClass({
   },
 
   _onKeyPress(e) {
-    if (e.key == 'Enter' || e.key == 'Space') {
+    if (e.key == 'Enter' || e.key == ' ') {
       this.props.onClick(e)
     }
   },
