@@ -163,12 +163,14 @@ var Ideas = React.createClass({
       this.setState(IdeasStore.get())
     }
     if (hasFileReader) {
+      document.addEventListener('dragover', this._onDragOver)
       document.addEventListener('drop', this._onDrop)
     }
   },
 
   componentWillUnmount() {
     if (hasFileReader) {
+      document.removeEventListener('dragover', this._onDragOver)
       document.removeEventListener('drop', this._onDrop)
     }
   },
@@ -179,6 +181,10 @@ var Ideas = React.createClass({
 
   _onBlur(e, html) {
     IdeasStore.editGeneral(html)
+  },
+
+  _onDragOver(e) {
+    e.preventDefault()
   },
 
   _onDrop(e) {
