@@ -1,3 +1,7 @@
+Switched to centred layout.
+
+Fixed drag and drop import in IE11.
+
 Automatically give focus to the names of newly-created sections.
 
 ## 0.3 / 2015-02-22
