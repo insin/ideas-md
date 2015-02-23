@@ -4,7 +4,7 @@ body {
   font-family: consolas, monospace;
   font-size: 16px;
   margin: 0;
-  padding: 16px;
+  padding: 0;
 }
 
 footer {
@@ -44,33 +44,43 @@ footer a {
   opacity: 1 !important;
 }
 
-.Ideas {
+#app {
+  border-right: 1px solid #575756;
   box-sizing: border-box;
   max-width: 50em;
-  padding-left: 48px;
+  margin: 0 auto;
+  padding: 16px;
+}
+.Ideas {
+
+  position: relative;
+
+
 }
 .Ideas__general {
+  padding-left: 44px;
   margin-bottom: 6px;
 }
+.Ideas__general  .PlainEditable {
+  padding: 8px 12px;
+}
 .Ideas__sections {
-  position: relative;
 }
 .Ideas__add {
-  left: -48px;
+  left: 0;
   opacity: .25;
   position: absolute;
-  top: 10px;
+  top: 0;
 }
 
+.Section {
+  padding-left: 44px;
+}
 .Section h2 {
-  display: inline-block;
-  margin: 0;
-  padding: 12px 51px 12px 0;
-  position: relative;
+  margin: 14px 0;
 }
 .Section__name {
-  margin-right: 16px;
-  min-width: 5em;
+  padding: 2px 4px;
 }
 .Section__ideas {
   padding: 8px 12px;
@@ -78,10 +88,9 @@ footer a {
 .Section__remove {
   opacity: 0;
   position: absolute;
-  right: 19px;
-  top: 10px;
+  left: 0;
 }
-.Section h2:hover .Section__remove {
+.Section:hover .Section__remove {
   opacity: .25;
 }
 .Section__remove:focus {

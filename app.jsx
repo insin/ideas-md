@@ -205,18 +205,19 @@ var Ideas = React.createClass({
 
   render() {
     return <div className="Ideas">
-      <PlainEditable
-        className="Ideas__general"
-        html={this.state.general}
-        onBlur={this._onBlur}
-        placeholder="[general]"
-      />
+      <Button className="Ideas__add"
+              onClick={this._addSection}
+              title="Add section">
+        +
+      </Button>
+      <div className="Ideas__general">
+        <PlainEditable
+          html={this.state.general}
+          onBlur={this._onBlur}
+          placeholder="[general]"
+        />
+      </div>
       <div className="Ideas__sections">
-        <Button className="Ideas__add"
-                onClick={this._addSection}
-                title="Add section">
-          +
-        </Button>
         {this.state.sections.map((section, i) => <Section
           {...section}
           index={i}
@@ -255,6 +256,11 @@ var Section = React.createClass({
   render() {
     return <div className="Section">
       <h2>
+        <Button className="Section__remove"
+                      onClick={this._onRemove}
+                      title="Remove section">
+          &mdash;
+        </Button>
         <PlainEditable
           autoFocus={this.props.isNew}
           className="Section__name"
@@ -264,11 +270,6 @@ var Section = React.createClass({
           onKeyDown={this._onKeyDown}
           placeholder="[section]"
         />
-        <Button className="Section__remove"
-                      onClick={this._onRemove}
-                      title="Remove section">
-          &mdash;
-        </Button>
       </h2>
       <PlainEditable
         className="Section__ideas"
