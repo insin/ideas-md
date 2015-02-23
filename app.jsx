@@ -78,10 +78,11 @@ function saveSections(sections) {
 var IdeasStore = {
   general: loadGeneral(),
   sections: loadSections(),
+  newSectionId: null,
 
   get() {
-    var {general, sections} = this
-    return {general, sections}
+    var {general, sections, newSectionId} = this
+    return {general, sections, newSectionId}
   },
 
   import(state) {
@@ -103,7 +104,8 @@ var IdeasStore = {
   },
 
   addSection() {
-    this.sections.unshift(assign({}, DEFAULT_SECTION, {id: ID_SEED++}))
+    this.newSectionId = ID_SEED++
+    this.sections.unshift(assign({}, DEFAULT_SECTION, {id: this.newSectionId}))
     saveSections(this.sections)
     this.notifyChange()
   },
@@ -212,6 +214,7 @@ var Ideas = React.createClass({
         {this.state.sections.map((section, i) => <Section
           {...section}
           index={i}
+          isNew={section.id == this.state.newSectionId}
           key={section.id}
           onChange={this._onSectionChange}
         />)}
@@ -247,6 +250,7 @@ var Section = React.createClass({
     return <div className="Section">
       <h2>
         <PlainEditable
+          autoFocus={this.props.isNew}
           className="Section__name"
           data-field="section"
           html={this.props.section}

@@ -1,3 +1,5 @@
+Automatically give focus to the names of newly-created sections.
+
 ## 0.3 / 2015-02-22
 
 Added importing ideas by dragging and dropping a Markdown file.
