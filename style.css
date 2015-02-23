@@ -49,6 +49,9 @@ footer a {
   max-width: 50em;
   padding-left: 48px;
 }
+.Ideas__general {
+  margin-bottom: 6px;
+}
 .Ideas__sections {
   position: relative;
 }
@@ -56,24 +59,27 @@ footer a {
   left: -48px;
   opacity: .25;
   position: absolute;
-  top: 16px;
+  top: 10px;
 }
 
 .Section h2 {
   display: inline-block;
   margin: 0;
-  padding: 19px 51px 19px 0;
+  padding: 12px 51px 12px 0;
   position: relative;
 }
 .Section__name {
   margin-right: 16px;
   min-width: 5em;
 }
+.Section__ideas {
+  padding: 8px 12px;
+}
 .Section__remove {
   opacity: 0;
   position: absolute;
   right: 19px;
-  top: 16px;
+  top: 10px;
 }
 .Section h2:hover .Section__remove {
   opacity: .25;
