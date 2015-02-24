@@ -19,3 +19,5 @@ last section
 ============
 
 ideas
+
+✓ à la mode

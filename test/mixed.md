@@ -10,7 +10,8 @@ ideas
 
 more ideas
 
-## empty section
+subheading
+==========
 
 ## last section
 

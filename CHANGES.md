@@ -1,3 +1,9 @@
+`##` headings now win if both supported heading types are detected when
+importing a file.
+
+Added export to an IDEAS.md file - defaults to exporting `##` headings, but will
+export headings matching the format used in the last file import.
+
 Fixed trimming of whitespace when importing.
 
 Switched to centred layout.

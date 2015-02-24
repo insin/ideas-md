@@ -39,10 +39,49 @@ var escapeHTML = (() => {
   return (text) => text.replace(escapeRE, escaper)
 })()
 
+var unescapeHTML = (() => {
+  var unescapeRE = /&(?:amp|gt|lt);/g
+  var unescapes = {'&amp;': '&', '&gt;': '>', '&lt;': '<'}
+  var unescaper = (match) => unescapes[match]
+  return (text) => text.replace(unescapeRE, unescaper)
+})()
+
 var linebreaksToBr = (() => {
   var linebreaksRE = /\r\n|\r|\n/g
   return (text) => text.replace(linebreaksRE, '<br>')
 })()
+
+var brsToLinebreak = (() => {
+  var brRE = /<br>/g
+  return (text) => text.replace(brRE, '\n')
+})()
+
+function utf8ToBase64(text) {
+  return window.btoa(unescape(encodeURIComponent(text)))
+}
+
+function exportFile(text, filename) {
+  var a = document.createElement('a')
+  var base64 = utf8ToBase64(text)
+
+  if ('download' in a) {
+    a.href = 'data:text/markdown;base64,' + base64
+    a.download = filename
+    var event = document.createEvent('MouseEvents')
+    event.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0,
+                         false, false, false, false, 0, null)
+    a.dispatchEvent(event)
+  }
+  else if (typeof navigator.msSaveBlob == 'function') {
+    navigator.msSaveBlob(new Blob([text], {
+      type: 'text/markdown;charset=utf-8;'
+    }), filename)
+  }
+  else {
+    window.location.href =
+      'data:application/octet-stream;base64,' + base64
+  }
+}
 
 // =================================================================== Store ===
 
@@ -52,6 +91,7 @@ var ID_SEED = 0
 
 var GENERAL_KEY = 'imd:general'
 var SECTIONS_KEY = 'imd:sections'
+var EXPORT_FORMAT_KEY = 'imd:export'
 
 var DEFAULT_SECTION = {section: '[section]', ideas: '[ideas]'}
 
@@ -75,14 +115,23 @@ function saveSections(sections) {
   localStorage.setItem(SECTIONS_KEY, JSON.stringify(sections))
 }
 
+function loadExportFormat() {
+  return localStorage.getItem(EXPORT_FORMAT_KEY) || 'hash'
+}
+
+function saveExportFormat(exportFormat) {
+  localStorage.setItem(EXPORT_FORMAT_KEY, exportFormat)
+}
+
 var IdeasStore = {
   general: loadGeneral(),
   sections: loadSections(),
+  exportFormat: loadExportFormat(),
   newSectionId: null,
 
   get() {
-    var {general, sections, newSectionId} = this
-    return {general, sections, newSectionId}
+    var {general, sections, exportFormat, newSectionId} = this
+    return {general, sections, exportFormat, newSectionId}
   },
 
   import(state) {
@@ -92,8 +141,10 @@ var IdeasStore = {
       section.ideas = linebreaksToBr(escapeHTML(section.ideas))
       return section
     })
+    this.exportFormat = state.exportFormat
     saveGeneral(this.general)
     saveSections(this.sections)
+    saveExportFormat(this.exportFormat)
     this.notifyChange()
   },
 
@@ -123,6 +174,12 @@ var IdeasStore = {
     this.notifyChange()
   },
 
+  editExportFormat(exportFormat) {
+    this.exportFormat = exportFormat
+    saveExportFormat(this.exportFormat)
+    this.notifyChange()
+  },
+
   notifyChange() {
     console.warn('IdeasStore: no change listener registered!')
   }
@@ -133,11 +190,18 @@ var hashHeadingsRE = /^##([^#][^\n]*)/gm
 
 function parseFileContents(text) {
   var parts
-  if (underlineHeadingsRE.test(text)) {
-    parts = text.split(underlineHeadingsRE)
-  }
-  else if (hashHeadingsRE.test(text)) {
+  var exportFormat
+  if (hashHeadingsRE.test(text)) {
     parts = text.split(hashHeadingsRE)
+    exportFormat = 'hash'
+  }
+  else if (underlineHeadingsRE.test(text)) {
+    parts = text.split(underlineHeadingsRE)
+    exportFormat = 'underline'
+  }
+  else {
+    alert('Could not find any headings with ## prefixes or == underlines.')
+    return
   }
   var general = trim(parts[0])
   var sections = []
@@ -146,7 +210,23 @@ function parseFileContents(text) {
     var ideas = trim(parts[i + 1])
     sections.push({section, ideas})
   }
-  return {general, sections}
+  return {general, sections, exportFormat}
+}
+
+function createFileContents(general, sections, style) {
+  var parts = [unescapeHTML(brsToLinebreak(general))]
+  sections.forEach(section => {
+    var name = unescapeHTML(section.section)
+    if (style == 'hash') {
+      parts.push(`## ${name}`)
+    }
+    else if (style == 'underline') {
+      var underline = name.split(/./g).join('=')
+      parts.push(`${name}\n${underline}`)
+    }
+    parts.push(unescapeHTML(brsToLinebreak(section.ideas)))
+  })
+  return parts.join('\n\n')
 }
 
 // ============================================================== Components ===
@@ -179,6 +259,12 @@ var Ideas = React.createClass({
     IdeasStore.addSection()
   },
 
+  _export(e) {
+    var {general, sections, exportFormat} = this.state
+    var contents = createFileContents(general, sections, exportFormat)
+    exportFile(contents, 'IDEAS.md')
+  },
+
   _onBlur(e, html) {
     IdeasStore.editGeneral(html)
   },
@@ -205,11 +291,10 @@ var Ideas = React.createClass({
 
   render() {
     return <div className="Ideas">
-      <Button className="Ideas__add"
-              onClick={this._addSection}
-              title="Add section">
-        +
-      </Button>
+      <div className="Ideas__buttons">
+        <Button onClick={this._addSection} title="Add section">+</Button>
+        <Button onClick={this._export} title="Export to file">↓</Button>
+      </div>
       <div className="Ideas__general">
         <PlainEditable
           html={this.state.general}
@@ -259,7 +344,7 @@ var Section = React.createClass({
         <Button className="Section__remove"
                       onClick={this._onRemove}
                       title="Remove section">
-          &mdash;
+          &ndash;
         </Button>
         <PlainEditable
           autoFocus={this.props.isNew}

@@ -30,7 +30,7 @@ footer a {
 .Button {
   border-radius: 50%;
   border: 1px solid #f8f8f2;
-  boz-sizing: border-box;
+  box-sizing: border-box;
   cursor: pointer;
   display: inline-block;
   font-size: 24px;
@@ -38,6 +38,7 @@ footer a {
   opacity: .5;
   text-align: center;
   transition: all .333s;
+  line-height:  28px;
   width: 32px;
 }
 .Button:hover {
@@ -52,10 +53,15 @@ footer a {
   padding: 16px;
 }
 .Ideas {
-
   position: relative;
-
-
+}
+.Ideas__buttons {
+  float: left;
+  width: 32px;
+}
+.Ideas__buttons .Button  {
+  margin-bottom: 8px;
+  opacity: .25;
 }
 .Ideas__general {
   padding-left: 44px;
@@ -65,12 +71,7 @@ footer a {
   padding: 8px 12px;
 }
 .Ideas__sections {
-}
-.Ideas__add {
-  left: 0;
-  opacity: .25;
-  position: absolute;
-  top: 0;
+  clear: both;
 }
 
 .Section {
