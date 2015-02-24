@@ -28,7 +28,7 @@ function joinClassNames() {
 }
 
 var trim = (() => {
-  var trimRE = /^\s+|\s+$/
+  var trimRE = /^\s+|\s+$/g
   return (text) => text ? text.replace(trimRE, '') : ''
 })()
 

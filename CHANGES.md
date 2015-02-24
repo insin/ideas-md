@@ -1,3 +1,5 @@
+Fixed trimming of whitespace when importing.
+
 Switched to centred layout.
 
 Fixed drag and drop import in IE11.
