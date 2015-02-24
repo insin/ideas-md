@@ -1,3 +1,5 @@
+## 0.4 / 2015-02-24
+
 `##` headings now win if both supported heading types are detected when
 importing a file.
 

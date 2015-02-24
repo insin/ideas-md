@@ -311,7 +311,7 @@ var Ideas = React.createClass({
           onChange={this._onSectionChange}
         />)}
       </div>
-      <footer>ideas-md 0.3 | <a href="https://github.com/insin/ideas-md">insin/ideas-md</a></footer>
+      <footer>ideas-md 0.4 | <a href="https://github.com/insin/ideas-md">insin/ideas-md</a></footer>
     </div>
   }
 })
