@@ -1,3 +1,11 @@
+## 0.5 / 2015-02-26
+
+Updated [`PlainEditable`](https://github.com/insin/react-plain-editable) to
+version 2.0.0 - now uses plain text for storage.
+
+Placeholder values are now displayed any time an editable value becomes blank,
+not just initially.
+
 ## 0.4 / 2015-02-24
 
 `##` headings now win if both supported heading types are detected when

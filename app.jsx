@@ -32,30 +32,6 @@ var trim = (() => {
   return (text) => text ? text.replace(trimRE, '') : ''
 })()
 
-var escapeHTML = (() => {
-  var escapeRE = /[&><]/g
-  var escapes = {'&': '&amp;', '>': '&gt;', '<': '&lt;'}
-  var escaper = (match) => escapes[match]
-  return (text) => text.replace(escapeRE, escaper)
-})()
-
-var unescapeHTML = (() => {
-  var unescapeRE = /&(?:amp|gt|lt);/g
-  var unescapes = {'&amp;': '&', '&gt;': '>', '&lt;': '<'}
-  var unescaper = (match) => unescapes[match]
-  return (text) => text.replace(unescapeRE, unescaper)
-})()
-
-var linebreaksToBr = (() => {
-  var linebreaksRE = /\r\n|\r|\n/g
-  return (text) => text.replace(linebreaksRE, '<br>')
-})()
-
-var brsToLinebreak = (() => {
-  var brRE = /<br>/g
-  return (text) => text.replace(brRE, '\n')
-})()
-
 function utf8ToBase64(text) {
   return window.btoa(unescape(encodeURIComponent(text)))
 }
@@ -93,10 +69,14 @@ var GENERAL_KEY = 'imd:general'
 var SECTIONS_KEY = 'imd:sections'
 var EXPORT_FORMAT_KEY = 'imd:export'
 
-var DEFAULT_SECTION = {section: '[section]', ideas: '[ideas]'}
+var GENERAL_PLACEHOLDER = '[general]'
+var SECTION_PLACEHOLDER = '[section]'
+var IDEAS_PLACEHOLDER = '[ideas]'
+
+var DEFAULT_SECTION = {section: SECTION_PLACEHOLDER, ideas: IDEAS_PLACEHOLDER}
 
 function loadGeneral() {
-  return localStorage.getItem(GENERAL_KEY) || '[general]'
+  return localStorage.getItem(GENERAL_KEY) || GENERAL_PLACEHOLDER
 }
 
 function saveGeneral(general) {
@@ -135,10 +115,9 @@ var IdeasStore = {
   },
 
   import(state) {
-    this.general = linebreaksToBr(escapeHTML(state.general))
+    this.general = state.general
     this.sections = state.sections.map(section => {
       section.id = ID_SEED++
-      section.ideas = linebreaksToBr(escapeHTML(section.ideas))
       return section
     })
     this.exportFormat = state.exportFormat
@@ -214,9 +193,9 @@ function parseFileContents(text) {
 }
 
 function createFileContents(general, sections, style) {
-  var parts = [unescapeHTML(brsToLinebreak(general))]
+  var parts = [general]
   sections.forEach(section => {
-    var name = unescapeHTML(section.section)
+    var name = section.section
     if (style == 'hash') {
       parts.push(`## ${name}`)
     }
@@ -224,7 +203,7 @@ function createFileContents(general, sections, style) {
       var underline = name.split(/./g).join('=')
       parts.push(`${name}\n${underline}`)
     }
-    parts.push(unescapeHTML(brsToLinebreak(section.ideas)))
+    parts.push(section.ideas)
   })
   return parts.join('\n\n')
 }
@@ -265,8 +244,8 @@ var Ideas = React.createClass({
     exportFile(contents, 'IDEAS.md')
   },
 
-  _onBlur(e, html) {
-    IdeasStore.editGeneral(html)
+  _onBlur(e, value) {
+    IdeasStore.editGeneral(value)
   },
 
   _onDragOver(e) {
@@ -297,9 +276,9 @@ var Ideas = React.createClass({
       </div>
       <div className="Ideas__general">
         <PlainEditable
-          html={this.state.general}
           onBlur={this._onBlur}
           placeholder="[general]"
+          value={this.state.general || GENERAL_PLACEHOLDER}
         />
       </div>
       <div className="Ideas__sections">
@@ -311,26 +290,19 @@ var Ideas = React.createClass({
           onChange={this._onSectionChange}
         />)}
       </div>
-      <footer>ideas-md 0.4 | <a href="https://github.com/insin/ideas-md">insin/ideas-md</a></footer>
+      <footer>ideas-md 0.5 | <a href="https://github.com/insin/ideas-md">insin/ideas-md</a></footer>
     </div>
   }
 })
 
 var Section = React.createClass({
-  _onBlur(e, html) {
+  _onBlur(e, value) {
     var field = e.target.getAttribute('data-field')
-    if (html != this.props[field]) {
+    if (value != this.props[field]) {
       var {id, section, ideas} = this.props
       var section = {id, section, ideas}
-      section[field] = html
+      section[field] = value
       IdeasStore.editSection(section, this.props.index)
-    }
-  },
-
-  _onKeyDown(e) {
-    if (e.key == 'Enter') {
-      e.preventDefault()
-      e.target.blur()
     }
   },
 
@@ -350,19 +322,19 @@ var Section = React.createClass({
           autoFocus={this.props.isNew}
           className="Section__name"
           data-field="section"
-          html={this.props.section}
           onBlur={this._onBlur}
-          onKeyDown={this._onKeyDown}
           placeholder="[section]"
+          singleLine
+          value={this.props.section || SECTION_PLACEHOLDER}
         />
       </h2>
       <PlainEditable
         className="Section__ideas"
         contentEditable="true"
         data-field="ideas"
-        html={this.props.ideas}
         onBlur={this._onBlur}
         placeholder="[ideas]"
+        value={this.props.ideas || IDEAS_PLACEHOLDER}
       />
     </div>
   }
