@@ -307,7 +307,9 @@ var Section = React.createClass({
   },
 
   _onRemove(e) {
-    IdeasStore.removeSection(this.props.index)
+    if (confirm(`Delete ${this.props.section}?`)) {
+      IdeasStore.removeSection(this.props.index)
+    }
   },
 
   render() {
