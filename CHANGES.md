@@ -1,3 +1,11 @@
+## 0.6 / 2015-03-05
+
+Ditched and deprecated `PlainEditable` - now using `input` and
+[react-textarea-autosize](https://github.com/andreypopp/react-textarea-autosize),
+which was all the app ever really needed.
+
+Added confirmation when deleting sections.
+
 ## 0.5 / 2015-02-26
 
 Updated [`PlainEditable`](https://github.com/insin/react-plain-editable) to
