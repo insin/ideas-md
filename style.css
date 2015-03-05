@@ -17,13 +17,25 @@ footer a {
   color: inherit;
 }
 
-.PlainEditable {
+input, textarea {
+  border: none;
   box-sizing: border-box;
+  width: 100%;
+  background-color: #222;
+  color: #f8f8f2;
+  font-family: consolas, monospace;
+  font-size: 16px;
 }
-.PlainEditable p {
-  margin: 0;
+input {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 2px 4px;
 }
-.PlainEditable:hover {
+textarea {
+  padding: 8px 12px;
+  resize: none;
+}
+input:hover, textarea:hover {
   outline: 1px solid #444;
 }
 
@@ -67,9 +79,6 @@ footer a {
   padding-left: 44px;
   margin-bottom: 6px;
 }
-.Ideas__general  .PlainEditable {
-  padding: 8px 12px;
-}
 .Ideas__sections {
   clear: both;
 }
@@ -79,12 +88,6 @@ footer a {
 }
 .Section h2 {
   margin: 14px 0;
-}
-.Section__name {
-  padding: 2px 4px;
-}
-.Section__ideas {
-  padding: 8px 12px;
 }
 .Section__remove {
   opacity: 0;

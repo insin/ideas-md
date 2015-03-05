@@ -59,6 +59,82 @@ function exportFile(text, filename) {
   }
 }
 
+// Inlining https://github.com/andreypopp/react-textarea-autosize v1.1.0 as
+// there isn't a global build available.
+var Textarea = React.createClass({
+  render: function() {
+    var props = assign({}, this.props, {
+      onChange: this.onChange,
+      style: assign({}, this.props.style, {overflow: 'hidden'})
+    });
+
+    return React.DOM.textarea(props, this.props.children);
+  },
+
+  componentDidMount: function() {
+    this.recalculateSize();
+    window.addEventListener('resize', this.recalculateSize);
+  },
+
+  componentWillUnmount: function() {
+    window.removeEventListener('resize', this.recalculateSize);
+  },
+
+  componentDidUpdate: function(prevProps) {
+    if (
+      prevProps.style ||
+      prevProps.value !== this.props.value ||
+      // We need to call `recalculateSize()` if component is used in
+      // uncontrolled mode because the `<textarea />` will re-render itself in
+      // that case.
+      //
+      // We check for `== null` to cover both `null` and `undefined`, this is
+      // what React does to check if component is used in uncontrolled mode.
+      this.props.value == null
+    ) {
+      this.recalculateSize();
+    }
+  },
+
+  onChange: function(e) {
+    if (this.props.onChange) {
+      this.props.onChange(e);
+    }
+    if (this.props.value === undefined) {
+      // controlled mode
+      this.recalculateSize();
+    }
+  },
+
+  recalculateSize: function() {
+    var diff;
+    var node = this.getDOMNode();
+
+    if (window.getComputedStyle) {
+      var styles = window.getComputedStyle(node);
+
+      // If the textarea is set to border-box, it's not necessary to
+      // subtract the padding.
+      if (styles.getPropertyValue('box-sizing') === "border-box" ||
+          styles.getPropertyValue('-moz-box-sizing') === "border-box" ||
+          styles.getPropertyValue('-webkit-box-sizing') === "border-box") {
+        diff = 0;
+      } else {
+        diff = (
+          parseInt(styles.getPropertyValue('padding-bottom') || 0, 10) +
+          parseInt(styles.getPropertyValue('padding-top') || 0, 10)
+        );
+      }
+    } else {
+      diff = 0;
+    }
+
+    var node = this.getDOMNode();
+    node.style.height = 'auto';
+    node.style.height = (node.scrollHeight - diff) + 'px';
+  }
+});
+
 // =================================================================== Store ===
 
 // Section ids are re-assigned by index on load - we just need to ensure they're
@@ -69,14 +145,10 @@ var GENERAL_KEY = 'imd:general'
 var SECTIONS_KEY = 'imd:sections'
 var EXPORT_FORMAT_KEY = 'imd:export'
 
-var GENERAL_PLACEHOLDER = '[general]'
-var SECTION_PLACEHOLDER = '[section]'
-var IDEAS_PLACEHOLDER = '[ideas]'
-
-var DEFAULT_SECTION = {section: SECTION_PLACEHOLDER, ideas: IDEAS_PLACEHOLDER}
+var DEFAULT_SECTION = {section: '', ideas: ''}
 
 function loadGeneral() {
-  return localStorage.getItem(GENERAL_KEY) || GENERAL_PLACEHOLDER
+  return localStorage.getItem(GENERAL_KEY)
 }
 
 function saveGeneral(general) {
@@ -244,8 +316,8 @@ var Ideas = React.createClass({
     exportFile(contents, 'IDEAS.md')
   },
 
-  _onBlur(e, value) {
-    IdeasStore.editGeneral(value)
+  _onBlur(e) {
+    IdeasStore.editGeneral(e.target.value)
   },
 
   _onDragOver(e) {
@@ -275,10 +347,12 @@ var Ideas = React.createClass({
         <Button onClick={this._export} title="Export to file">↓</Button>
       </div>
       <div className="Ideas__general">
-        <PlainEditable
+        <Textarea
+          defaultValue={this.state.general}
           onBlur={this._onBlur}
           placeholder="[general]"
-          value={this.state.general || GENERAL_PLACEHOLDER}
+          rows="1"
+          spellCheck="false"
         />
       </div>
       <div className="Ideas__sections">
@@ -296,12 +370,12 @@ var Ideas = React.createClass({
 })
 
 var Section = React.createClass({
-  _onBlur(e, value) {
-    var field = e.target.getAttribute('data-field')
-    if (value != this.props[field]) {
+  _onBlur(e) {
+    var {name, value} = e.target
+    if (value != this.props[name]) {
       var {id, section, ideas} = this.props
       var section = {id, section, ideas}
-      section[field] = value
+      section[name] = value
       IdeasStore.editSection(section, this.props.index)
     }
   },
@@ -320,23 +394,25 @@ var Section = React.createClass({
                       title="Remove section">
           &ndash;
         </Button>
-        <PlainEditable
+        <input
           autoFocus={this.props.isNew}
           className="Section__name"
-          data-field="section"
+          defaultValue={this.props.section}
+          name="section"
           onBlur={this._onBlur}
           placeholder="[section]"
-          singleLine
-          value={this.props.section || SECTION_PLACEHOLDER}
+          spellCheck="false"
+          type="text"
         />
       </h2>
-      <PlainEditable
+      <Textarea
         className="Section__ideas"
-        contentEditable="true"
-        data-field="ideas"
+        defaultValue={this.props.ideas}
+        name="ideas"
         onBlur={this._onBlur}
         placeholder="[ideas]"
-        value={this.props.ideas || IDEAS_PLACEHOLDER}
+        rows="1"
+        spellCheck="false"
       />
     </div>
   }
