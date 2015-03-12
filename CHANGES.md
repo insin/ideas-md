@@ -1,3 +1,7 @@
+## 0.6.1 / 2015-03-12
+
+Upgraded to React 0.13.
+
 ## 0.6 / 2015-03-05
 
 Ditched and deprecated `PlainEditable` - now using `input` and
