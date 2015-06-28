@@ -26,7 +26,7 @@ var Section = React.createClass({
         </Button>
         <input autoFocus={this.props.isNew}
                className="Section__name"
-               value={this.props.section}
+               defaultValue={this.props.section}
                name="section"
                onBlur={this.handleBlur}
                placeholder="[section]"
