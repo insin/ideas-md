@@ -1,0 +1,38 @@
+body {
+  background-color: #222;
+  color: #f8f8f2;
+  font-family: consolas, monospace;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+#app {
+  border-right: 1px solid #575756;
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 50em;
+  padding: 16px;
+}
+.MarkdownArea {
+  padding: 5px 8px;
+}
+.MarkdownArea:hover {
+  outline: 1px solid #444;
+}
+.CodeMirror {
+  background-color: #222 !important;
+  font-family: consolas, monospace;
+  font-size: 16px;
+  height: auto;
+}
+input::placeholder {
+  color: #969692 !important;
+  opacity: 1;
+}
+/* Wat */
+.CodeMirror-placeholder {
+  color: #969692 !important;
+}
+.cm-s-monokai div.CodeMirror-selected {
+  background: #444 !important;
+}

@@ -1,0 +1,16 @@
+{
+  "extends": ["standard", "standard-react"],
+  "globals": {
+    "VERSION": true
+  },
+  "rules": {
+    "brace-style": [2, "stroustrup", {"allowSingleLine": true}],
+    "eqeqeq": [2, "smart"],
+    "react/jsx-quotes": [2, "double", "avoid-escape"],
+    "react/no-did-mount-set-state": 0,
+    "react/prop-types": 0,
+    "react/wrap-multilines": 0,
+    "space-before-function-paren": [2, "never"]
+  },
+  "parser": "babel-eslint"
+}

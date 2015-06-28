@@ -1,0 +1,38 @@
+.Section {
+  padding-left: 44px;
+}
+.Section h2 {
+  margin: 14px 0;
+}
+.Section__remove {
+  left: 0;
+  opacity: 0;
+  position: absolute;
+}
+.Section:hover .Section__remove {
+  opacity: .25;
+}
+.Section__remove:focus {
+  opacity: .25;
+}
+.Section input {
+  background-color: #222;
+  border: none;
+  box-sizing: border-box;
+  color: #f8f8f2;
+  font-family: consolas, monospace;
+  font-size: 16px;
+  width: 100%;
+}
+.Section input {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 2px 4px;
+}
+.Section input:hover {
+  outline: 1px solid #444;
+}
+.Section input::selection {
+  background-color: #444;
+  color: #F8F8F2;
+}
