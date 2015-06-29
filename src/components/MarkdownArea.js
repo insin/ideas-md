@@ -16,6 +16,11 @@ var MarkdownArea = React.createClass({
   componentWillUnmount() {
     this.cm.toTextArea()
   },
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value !== this.cm.getValue()) {
+      this.cm.setValue(nextProps.value)
+    }
+  },
   handleBlur(doc) {
     this.props.onBlur({target: {name: this.props.name, value: doc.getValue()}})
   },

@@ -15,7 +15,9 @@ module.exports = {
       'codemirror/mode/xml/xml',
       'codemirror/mode/markdown/markdown',
       'codemirror/mode/gfm/gfm',
-      'react'
+      'react',
+      'react/lib/update',
+      'redux',
     ]
   },
   node: {

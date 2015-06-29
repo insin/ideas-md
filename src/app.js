@@ -2,6 +2,7 @@ require('codemirror/lib/codemirror.css')
 require('codemirror/theme/monokai.css')
 require('./app.css')
 
+require('es6-promise').polyfill()
 require('codemirror')
 require('codemirror/addon/display/placeholder')
 require('codemirror/addon/mode/overlay')
@@ -11,6 +12,25 @@ require('codemirror/mode/markdown/markdown')
 require('codemirror/mode/gfm/gfm')
 
 var React = require('react')
-var Ideas = require('./components/Ideas')
+var {bindActionCreators, createDispatcher, createRedux} = require('redux')
+var {Connector, Provider} = require('redux/react')
 
-React.render(<Ideas/>, document.getElementById('app'))
+var Ideas = require('./components/Ideas')
+var ideasActions = require('./actions')
+var ideasStore = require('./store')
+var {loadState} = require('./utils')
+
+var redux = createRedux(createDispatcher(ideasStore), loadState())
+
+var select = state => state
+
+var renderApp = ({dispatch, ...state}) =>
+  <Ideas {...state} actions={bindActionCreators(ideasActions, dispatch)}/>
+
+var renderConnector = () =>
+  <Connector select={select}>{renderApp}</Connector>
+
+React.render(
+  <Provider redux={redux}>{renderConnector}</Provider>,
+  document.getElementById('app')
+)

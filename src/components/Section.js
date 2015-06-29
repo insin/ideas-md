@@ -4,18 +4,20 @@ var React = require('react')
 
 var Button = require('./Button')
 var MarkdownArea = require('./MarkdownArea')
-var IdeasStore = require('../store')
 
 var Section = React.createClass({
   handleBlur(e) {
     var {name, value} = e.target
     if (value !== this.props[name]) {
-      IdeasStore.editSection({[name]: value}, this.props.index)
+      this.props.actions.editSection({
+        id: this.props.id,
+        change: {[name]: value}
+      })
     }
   },
   handleRemove(e) {
     if (window.confirm(`Delete ${this.props.section || '[section]'}?`)) {
-      IdeasStore.removeSection(this.props.index)
+      this.props.actions.removeSection(this.props.id)
     }
   },
   render() {

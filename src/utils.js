@@ -11,6 +11,20 @@ function uuid() {
   })
 }
 
+function loadState() {
+  var json = window.localStorage['imd']
+  return json ? JSON.parse(json) : {
+    exportFormat: 'hash',
+    general: '',
+    newSectionId: '',
+    sections: []
+  }
+}
+
+function storeState(state) {
+  window.localStorage['imd'] = JSON.stringify(state)
+}
+
 function utf8ToBase64(text) {
   return window.btoa(unescape(encodeURIComponent(text)))
 }
@@ -61,7 +75,7 @@ function parseFileContents(text) {
   for (var i = 1; i < parts.length; i += 2) {
     var section = trim(parts[i])
     var ideas = trim(parts[i + 1])
-    sections.push({section, ideas})
+    sections.push({id: uuid(), section, ideas})
   }
   return {general, sections, exportFormat}
 }
@@ -82,4 +96,6 @@ function createFileContents(general, sections, style) {
   return parts.join('\n\n')
 }
 
-module.exports = {trim, uuid, exportFile, parseFileContents, createFileContents}
+module.exports = {
+  trim, uuid, loadState, storeState, exportFile, parseFileContents, createFileContents
+}
