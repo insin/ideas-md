@@ -1,9 +1,9 @@
 require('./Gist.css')
 
 var React = require('react')
+var Octicon = require('react-octicon')
 
 var Button = require('./Button')
-var Octicon = require('./Octicon')
 var {createMarkdown} = require('../markdown')
 
 var Gist = React.createClass({

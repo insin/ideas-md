@@ -1,10 +1,10 @@
 require('./Section.css')
 
 var React = require('react')
+var Octicon = require('react-octicon')
 
 var Button = require('./Button')
 var MarkdownArea = require('./MarkdownArea')
-var Octicon = require('./Octicon')
 
 var Section = React.createClass({
   handleBlur(e) {

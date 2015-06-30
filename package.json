@@ -37,8 +37,8 @@
   "dependencies": {
     "codemirror": "^5.4.0",
     "es6-promise": "^2.3.0",
-    "octicons": "^2.2.0",
     "react": "^0.13.3",
+    "react-octicon": "^1.0.1",
     "redux": "^0.12.0",
     "whatwg-fetch": "^0.9.0"
   },

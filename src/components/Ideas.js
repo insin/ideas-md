@@ -1,11 +1,12 @@
 require('./Ideas.css')
 
 var React = require('react')
+var Octicon = require('react-octicon')
 
 var Button = require('./Button')
 var Gist = require('./Gist')
 var MarkdownArea = require('./MarkdownArea')
-var Octicon = require('./Octicon')
+
 var Section = require('./Section')
 var {exportFile, storeState} = require('../utils')
 var {createMarkdown} = require('../markdown')

@@ -18,6 +18,7 @@ module.exports = {
       'es6-promise',
       'react',
       'react/lib/update',
+      'react-octicon',
       'redux',
       'whatwg-fetch'
     ]
