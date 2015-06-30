@@ -1,6 +1,15 @@
 .Ideas {
   position: relative;
 }
+.Ideas__tools {
+  position: absolute;
+  right: -60px;
+  width: 32px;
+}
+.Ideas__tools .Button {
+  margin-bottom: 8px;
+  opacity: .25;
+}
 .Ideas__buttons {
   float: left;
   width: 32px;

@@ -1,7 +1,16 @@
 var React = require('react')
 var CodeMirror = require('codemirror')
 
+/**
+ * A Markdown editing component which only provides updates onBlur.
+ */
 var MarkdownArea = React.createClass({
+  propTypes: {
+    name: React.PropTypes.string.isRequired,
+    onBlur: React.PropTypes.func.isRequired,
+    placeholder: React.PropTypes.string.isRequired,
+    value: React.PropTypes.string.isRequired
+  },
   componentDidMount() {
     this.cm = CodeMirror.fromTextArea(React.findDOMNode(this.refs.textarea), {
       lineWrapping: true,

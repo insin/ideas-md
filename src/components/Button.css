@@ -4,9 +4,9 @@
   box-sizing: border-box;
   cursor: pointer;
   display: inline-block;
-  font-size: 24px;
+  font-size: 16px;
   height: 32px;
-  line-height:  28px;
+  line-height: 30px;
   opacity: .5;
   text-align: center;
   transition: all .333s;
@@ -14,4 +14,9 @@
 }
 .Button:hover {
   opacity: 1 !important;
+}
+.Button--active {
+  opacity: 1 !important;
+  color: #9EFFFF !important;
+  border-color: #9EFFFF !important;
 }

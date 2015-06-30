@@ -15,9 +15,11 @@ module.exports = {
       'codemirror/mode/xml/xml',
       'codemirror/mode/markdown/markdown',
       'codemirror/mode/gfm/gfm',
+      'es6-promise',
       'react',
       'react/lib/update',
       'redux',
+      'whatwg-fetch'
     ]
   },
   node: {
@@ -49,6 +51,7 @@ module.exports = {
     loaders: [
       {test: /\.js$/, loader: 'babel', exclude: /node_modules/},
       {test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css?-restructuring!autoprefixer')}
+      {test: /\.(otf|eot|svg|ttf|woff|woff2).*$/, loader: 'url?limit=8192'}
     ]
   }
 }

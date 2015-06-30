@@ -31,7 +31,8 @@ module.exports = {
   module: {
     loaders: [
       {test: /\.js$/, loader: 'react-hot!babel', include: path.join(__dirname, 'src')},
-      {test: /\.css$/, loader: 'style!css!autoprefixer'}
+      {test: /\.css$/, loader: 'style!css?-restructuring!autoprefixer'},
+      {test: /\.(otf|eot|svg|ttf|woff|woff2)$/, loader: 'url?limit=8192'}
     ]
   }
 }

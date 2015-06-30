@@ -5,11 +5,13 @@ var React = require('react')
 var Button = React.createClass({
   propTypes: {
     onClick: React.PropTypes.func.isRequired,
+    active: React.PropTypes.bool,
     className: React.PropTypes.string,
     tabIndex: React.PropTypes.string
   },
   getDefaultProps() {
     return {
+      active: false,
       tabIndex: '0'
     }
   },
@@ -22,8 +24,11 @@ var Button = React.createClass({
     }
   },
   render() {
-    var {onClick, className, tabIndex, ...props} = this.props
-    return <span className={`Button ${className}`}
+    var {active, className, onClick, tabIndex, ...props} = this.props
+    var classNames = ['Button']
+    if (active) classNames.push('Button--active')
+    if (className) classNames.push(className)
+    return <span className={classNames.join(' ')}
                  onClick={this.handleClick}
                  onKeyPress={this.handleKeyPress}
                  role="button"

@@ -1,0 +1,28 @@
+.Gist {
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #575756;
+}
+.Gist input {
+  background-color: #222;
+  border: none;
+  border-bottom: 2px solid #575756;
+  box-sizing: border-box;
+  color: #f8f8f2;
+  font-family: consolas, monospace;
+  font-size: 16px;
+}
+.Gist__inputs {
+  padding-left: 49px;
+}
+.Gist__inputs :first-child {
+  margin-top: 0;
+}
+.Gist__buttons {
+  float: left;
+  width: 32px;
+}
+.Gist__buttons .Button {
+  margin-bottom: 8px;
+  opacity: .25;
+}

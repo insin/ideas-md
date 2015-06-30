@@ -3,13 +3,21 @@ require('./Ideas.css')
 var React = require('react')
 
 var Button = require('./Button')
+var Gist = require('./Gist')
 var MarkdownArea = require('./MarkdownArea')
+var Octicon = require('./Octicon')
 var Section = require('./Section')
-var {createFileContents, exportFile, parseFileContents, storeState} = require('../utils')
+var {exportFile, storeState} = require('../utils')
+var {createMarkdown} = require('../markdown')
 
 var hasFileReader = 'FileReader' in window
 
 var Ideas = React.createClass({
+  getInitialState() {
+    return {
+      showGist: !!this.props.gist
+    }
+  },
   componentDidMount() {
     if (hasFileReader) {
       document.addEventListener('dragover', this.handleDragOver)
@@ -29,11 +37,8 @@ var Ideas = React.createClass({
     this.props.actions.addSection()
   },
   handleBeforeUnload(e) {
-    var {general, sections, exportFormat} = this.props
-    storeState({general, sections, exportFormat})
-  },
-  handleBlur(e) {
-    this.props.actions.editGeneral(e.target.value)
+    var {general, sections, exportFormat, gist, token} = this.props
+    storeState({general, sections, exportFormat, gist, token})
   },
   handleDragOver(e) {
     e.preventDefault()
@@ -44,33 +49,46 @@ var Ideas = React.createClass({
       return
     }
     var reader = new window.FileReader()
-    reader.onload = (e) => {
-      var text = e.target.result
-      var state = parseFileContents(text)
-      this.props.actions.importIdeas(state)
-    }
+    reader.onload = (e) => this.props.actions.importMarkdown(e.target.result)
     reader.readAsText(e.dataTransfer.files[0])
   },
+  handleEditGeneral(e) {
+    this.props.actions.editGeneral(e.target.value)
+  },
   handleExport(e) {
-    var {general, sections, exportFormat} = this.props
-    var contents = createFileContents(general, sections, exportFormat)
-    exportFile(contents, 'IDEAS.md')
+    exportFile(createMarkdown(this.props), 'IDEAS.md')
+  },
+  handleToggleGist() {
+    this.setState({showGist: !this.state.showGist})
   },
 
   render() {
-    var {actions, general, newSectionId, sections} = this.props
+    var {actions, general, gist, loading, newSectionId, sections, token, updating} = this.props
+    var {showGist} = this.state
     return <div className="Ideas">
-      <div className="Ideas__buttons">
-        <Button onClick={this.handleAddSection} title="Add section">+</Button>
-        <Button onClick={this.handleExport} title="Export to file">↓</Button>
+      <div className="Ideas__tools">
+        <Button onClick={this.handleToggleGist} title="Gist integration" active={showGist}>
+          <Octicon name="gist"/>
+        </Button>
+        <Button onClick={this.handleExport} title="Export to file">
+          <Octicon name="cloud-download"/>
+        </Button>
       </div>
-      <div className="Ideas__general">
+
+      {this.state.showGist && <Gist {...this.props}/>}
+
+      <div className="Ideas__buttons">
+        <Button onClick={this.handleAddSection} title="Add section">
+          <Octicon name="plus"/>
+        </Button>
+      </div>
+      <div className="Ideas__general" key={`general${gist}`}>
         <MarkdownArea name="general"
                       value={general}
-                      onBlur={this.handleBlur}
+                      onBlur={this.handleEditGeneral}
                       placeholder="[general]"/>
       </div>
-      <div className="Ideas__sections">
+      <div className="Ideas__sections" key={`sections${gist}`}>
         {sections.map((section, i) =>
           <Section {...section}
                    actions={actions}

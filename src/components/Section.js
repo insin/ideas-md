@@ -4,6 +4,7 @@ var React = require('react')
 
 var Button = require('./Button')
 var MarkdownArea = require('./MarkdownArea')
+var Octicon = require('./Octicon')
 
 var Section = React.createClass({
   handleBlur(e) {
@@ -24,7 +25,7 @@ var Section = React.createClass({
     return <div className="Section">
       <h2>
         <Button className="Section__remove" onClick={this.handleRemove} title="Remove section">
-          &ndash;
+          <Octicon name="trashcan"/>
         </Button>
         <input autoFocus={this.props.isNew}
                className="Section__name"

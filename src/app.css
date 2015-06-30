@@ -6,6 +6,9 @@ body {
   margin: 0;
   padding: 0;
 }
+a {
+  color: #9EFFFF;
+}
 #app {
   border-right: 1px solid #575756;
   box-sizing: border-box;
@@ -29,7 +32,6 @@ input::placeholder {
   color: #969692 !important;
   opacity: 1;
 }
-/* Wat */
 .CodeMirror-placeholder {
   color: #969692 !important;
 }

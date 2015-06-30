@@ -20,18 +20,33 @@ function reduce(state, action) {
       })
     case ActionType.EDIT_GENERAL:
       return {...state, general: action.general}
+    case ActionType.EDIT_GIST:
+      return {...state, gist: action.gist}
     case ActionType.EDIT_SECTION:
       var sectionIndex = findSectionIndex(state.sections, action.id)
       var section = {...state.sections[sectionIndex], ...action.change}
+      // Move the edited section to the head of the sections list
       return update(state, {
         sections: {$splice: [[sectionIndex, 1], [0, 0, section]]}
       })
-    case ActionType.IMPORT_IDEAS:
+    case ActionType.EDIT_TOKEN:
+      return {...state, token: action.token}
+    case ActionType.IMPORT:
       return {...state, ...action.importState}
+    case ActionType.LOADING_GIST:
+      return {...state, loading: true}
+    case ActionType.LOADING_GIST_FAILURE:
+    case ActionType.LOADING_GIST_SUCCESS:
+      return {...state, loading: false}
     case ActionType.REMOVE_SECTION:
       return update(state, {
         sections: {$splice: [[findSectionIndex(state.sections, action.id), 1]]}
       })
+    case ActionType.UPDATING_GIST:
+      return {...state, updating: true}
+    case ActionType.UPDATING_GIST_FAILURE:
+    case ActionType.UPDATING_GIST_SUCCESS:
+      return {...state, updating: false}
   }
   return state
 }

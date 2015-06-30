@@ -1,8 +1,3 @@
-var trim = (() => {
-  var trimRE = /^\s+|\s+$/g
-  return (text) => text ? text.replace(trimRE, '') : ''
-})()
-
 function uuid() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
     var r = Math.random() * 16 | 0
@@ -13,12 +8,17 @@ function uuid() {
 
 function loadState() {
   var json = window.localStorage['imd']
-  return json ? JSON.parse(json) : {
+  var defaultState = {
     exportFormat: 'hash',
     general: '',
+    gist: '',
+    loading: false,
     newSectionId: '',
-    sections: []
+    sections: [],
+    token: '',
+    updating: false
   }
+  return json ? {...defaultState, ...JSON.parse(json)} : defaultState
 }
 
 function storeState(state) {
@@ -52,50 +52,6 @@ function exportFile(text, filename) {
   }
 }
 
-var underlineHeadingsRE = /^([^\n]+)\n={2,}\n+/gm
-var hashHeadingsRE = /^##([^#][^\n]*)/gm
-
-function parseFileContents(text) {
-  var parts
-  var exportFormat
-  if (hashHeadingsRE.test(text)) {
-    parts = text.split(hashHeadingsRE)
-    exportFormat = 'hash'
-  }
-  else if (underlineHeadingsRE.test(text)) {
-    parts = text.split(underlineHeadingsRE)
-    exportFormat = 'underline'
-  }
-  else {
-    window.alert('Could not find any headings with ## prefixes or == underlines.')
-    return
-  }
-  var general = trim(parts[0])
-  var sections = []
-  for (var i = 1; i < parts.length; i += 2) {
-    var section = trim(parts[i])
-    var ideas = trim(parts[i + 1])
-    sections.push({id: uuid(), section, ideas})
-  }
-  return {general, sections, exportFormat}
-}
-
-function createFileContents(general, sections, style) {
-  var parts = [general]
-  sections.forEach(section => {
-    var name = section.section
-    if (style === 'hash') {
-      parts.push(`## ${name}`)
-    }
-    else if (style === 'underline') {
-      var underline = name.split(/./g).join('=')
-      parts.push(`${name}\n${underline}`)
-    }
-    parts.push(section.ideas)
-  })
-  return parts.join('\n\n')
-}
-
 module.exports = {
-  trim, uuid, loadState, storeState, exportFile, parseFileContents, createFileContents
+  uuid, loadState, storeState, exportFile
 }
