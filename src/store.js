@@ -36,8 +36,9 @@ function reduce(state, action) {
     case ActionType.LOADING_GIST:
       return {...state, loading: true}
     case ActionType.LOADING_GIST_FAILURE:
-    case ActionType.LOADING_GIST_SUCCESS:
       return {...state, loading: false}
+    case ActionType.LOADING_GIST_SUCCESS:
+      return {...state, loading: false, lastSuccessfulGist: state.gist}
     case ActionType.REMOVE_SECTION:
       return update(state, {
         sections: {$splice: [[findSectionIndex(state.sections, action.id), 1]]}

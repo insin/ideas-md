@@ -25,6 +25,13 @@ var Ideas = React.createClass({
       document.addEventListener('drop', this.handleDrop)
     }
     window.addEventListener('beforeunload', this.handleBeforeUnload)
+
+    if (!this.props.gist && window.location.hash.length === 21) {
+      this.props.actions.editGist(window.location.hash.substring(1))
+      if (!this.state.showGist) {
+        this.setState({showGist: true})
+      }
+    }
   },
   componentWillUnmount() {
     if (hasFileReader) {
@@ -83,13 +90,13 @@ var Ideas = React.createClass({
           <Octicon name="plus"/>
         </Button>
       </div>
-      <div className="Ideas__general" key={`general${gist}`}>
+      <div className="Ideas__general" key="general">
         <MarkdownArea name="general"
                       value={general}
                       onBlur={this.handleEditGeneral}
                       placeholder="[general]"/>
       </div>
-      <div className="Ideas__sections" key={`sections${gist}`}>
+      <div className="Ideas__sections" key="sections">
         {sections.map((section, i) =>
           <Section {...section}
                    actions={actions}

@@ -15,8 +15,11 @@
 .Gist__inputs {
   padding-left: 49px;
 }
-.Gist__inputs :first-child {
+.Gist__inputs > :first-child {
   margin-top: 0;
+}
+.Gist__inputs > :last-child {
+  margin-bottom: 0;
 }
 .Gist__buttons {
   float: left;
@@ -25,4 +28,10 @@
 .Gist__buttons .Button {
   margin-bottom: 8px;
   opacity: .25;
+}
+.Gist__help {
+  display: block;
+  margin-top: 8px;
+  color: #999;
+  font-size: .75em;
 }

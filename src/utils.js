@@ -12,6 +12,7 @@ function loadState() {
     exportFormat: 'hash',
     general: '',
     gist: '',
+    lastSuccessfulGist: '',
     loading: false,
     newSectionId: '',
     sections: [],
