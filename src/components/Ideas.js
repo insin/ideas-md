@@ -104,7 +104,13 @@ var Ideas = React.createClass({
                    key={section.id}/>
         )}
       </div>
-      <footer>ideas-md {VERSION} | <a href="https://github.com/insin/ideas-md">insin/ideas-md</a></footer>
+      <footer>
+        <span>{`ideas-md v${VERSION}`}</span>
+        {' | '}
+        <a href="https://github.com/insin/ideas-md">
+          <Octicon name="repo-forked"/> on <Octicon name="logo-github"/>
+        </a>
+      </footer>
     </div>
   }
 })

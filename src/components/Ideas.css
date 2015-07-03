@@ -31,6 +31,11 @@
   margin-top: 32px;
   text-align: center;
 }
-.Ideas footer a {
+.Ideas footer > * {
   color: inherit;
+  text-decoration: none;
+  transition: all .333s;
+}
+.Ideas footer > *:hover {
+  color: #f8f8f2 ! important;
 }
