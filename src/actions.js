@@ -17,8 +17,7 @@ function importGist() {
   return (dispatch, getState) => {
     dispatch({type: ActionType.LOADING_GIST})
     var {gist, token} = getState()
-    var headers =
-    fetch(`https://api.github.com/gists/${gist}`, {
+    window.fetch(`https://api.github.com/gists/${gist}`, {
       method: 'GET',
       headers: getHeaders(token)
     })
@@ -55,7 +54,7 @@ function updateGist(markdown) {
   return (dispatch, getState) => {
     dispatch({type: ActionType.UPDATING_GIST})
     var {gist, token} = getState()
-    fetch(`https://api.github.com/gists/${gist}`, {
+    window.fetch(`https://api.github.com/gists/${gist}`, {
       method: 'PATCH',
       headers: getHeaders(token),
       body: JSON.stringify({

@@ -51,7 +51,7 @@ module.exports = {
   module: {
     loaders: [
       {test: /\.js$/, loader: 'babel', exclude: /node_modules/},
-      {test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css?-restructuring!autoprefixer')}
+      {test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css?-restructuring!autoprefixer')},
       {test: /\.(otf|eot|svg|ttf|woff|woff2).*$/, loader: 'url?limit=8192'}
     ]
   }
