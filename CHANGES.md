@@ -1,3 +1,11 @@
+Replaced text buttons with GitHub Octicons.
+
+Added GitHub Gist integration - sync content with a Gist and update a Gist you own, using a personal access token.
+
+Now using Redux for state management.
+
+Now using CodeMirror for multiline text input.
+
 ## 0.6.1 / 2015-03-12
 
 Upgraded to React 0.13.
