@@ -38,8 +38,10 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify('production'),
       'VERSION': JSON.stringify(pkg.version)
     }),
-    new ExtractTextPlugin('style.css'),
-    new webpack.optimize.CommonsChunkPlugin('vendor', 'deps.js'),
+    new ExtractTextPlugin('[name].css', {
+      allChunks: true
+    }),
+    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
