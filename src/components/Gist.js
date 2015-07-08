@@ -59,7 +59,7 @@ var Gist = React.createClass({
             </a>
           </span>}
           {!gist && <span className="Gist__help">
-            Paste a Gist URL or ID &mdash; e.g. https://gist.github.com/insin/98eed17905bcb6a65bf0
+            Paste a Gist URL or ID &mdash; e.g. https://gist.github.com/insin/1ac3e9066d226695814d
           </span>}
         </p>
         {(!!token || gist === lastSuccessfulGist) && <p key="token">
