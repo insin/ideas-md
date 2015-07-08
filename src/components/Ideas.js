@@ -71,7 +71,7 @@ var Ideas = React.createClass({
   },
 
   render() {
-    var {actions, general, gist, loading, newSectionId, sections, token, updating} = this.props
+    var {actions, general, newSectionId, sections} = this.props
     var {showGist} = this.state
     return <div className="Ideas">
       <div className="Ideas__tools">

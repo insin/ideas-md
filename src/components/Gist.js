@@ -28,7 +28,7 @@ var Gist = React.createClass({
   },
 
   render() {
-    var {actions, gist, lastSuccessfulGist, loading, updating, token} = this.props
+    var {gist, lastSuccessfulGist, loading, updating, token} = this.props
     return <div className="Gist">
       <div className="Gist__buttons">
         {gist && <Button onClick={this.handleImportGist} title="Sync with Gist" active={loading}>
