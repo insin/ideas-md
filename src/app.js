@@ -23,15 +23,15 @@ var actions = require('./actions')
 var reducer = require('./reducer')
 var {loadState} = require('./utils')
 
-var store = applyMiddleware(thunkMiddleware)(createStore)(reducer, loadState())
-
-var select = state => state
-
 var renderApp = ({dispatch, ...state}) =>
   <Ideas {...state} actions={bindActionCreators(actions, dispatch)}/>
 
+var select = state => state
+
 var renderConnector = () =>
   <Connector select={select}>{renderApp}</Connector>
+
+var store = applyMiddleware(thunkMiddleware)(createStore)(reducer, loadState())
 
 React.render(
   <Provider store={store}>{renderConnector}</Provider>,
