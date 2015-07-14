@@ -14,7 +14,7 @@ require('codemirror/mode/markdown/markdown')
 require('codemirror/mode/gfm/gfm')
 
 var React = require('react')
-var {bindActionCreators, createStore, applyMiddleware} = require('redux')
+var {applyMiddleware, bindActionCreators, createStore} = require('redux')
 var {Connector, Provider} = require('react-redux')
 var thunkMiddleware = require('redux-thunk')
 
