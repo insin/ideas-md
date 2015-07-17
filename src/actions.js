@@ -1,5 +1,5 @@
+var {action, optionsAction} = require('redux-action-utils')
 var types = require('./types')
-var {action, argAction, optionsAction} = require('./action-utils')
 var {parseMarkdown} = require('./markdown')
 
 function importMarkdown(markdown) {
@@ -85,9 +85,9 @@ module.exports = {
   importMarkdown,
   updateGist,
   addSection: action(types.ADD_SECTION),
-  editGeneral: argAction(types.EDIT_GENERAL, 'general'),
-  editGist: argAction(types.EDIT_GIST, 'gist'),
+  editGeneral: action(types.EDIT_GENERAL, 'general'),
+  editGist: action(types.EDIT_GIST, 'gist'),
   editSection: optionsAction(types.EDIT_SECTION, 'id', 'change'),
-  editToken: argAction(types.EDIT_TOKEN, 'token'),
-  removeSection: argAction(types.REMOVE_SECTION, 'id')
+  editToken: action(types.EDIT_TOKEN, 'token'),
+  removeSection: action(types.REMOVE_SECTION, 'id')
 }
