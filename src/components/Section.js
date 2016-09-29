@@ -27,19 +27,23 @@ var Section = React.createClass({
         <Button className="Section__remove" onClick={this.handleRemove} title="Remove section">
           <Octicon name="trashcan"/>
         </Button>
-        <input autoFocus={this.props.isNew}
-               className="Section__name"
-               defaultValue={this.props.section}
-               name="section"
-               onBlur={this.handleBlur}
-               placeholder="[section]"
-               spellCheck="false"
-               type="text"/>
+        <input
+          autoFocus={this.props.isNew}
+          className="Section__name"
+          defaultValue={this.props.section}
+          name="section"
+          onBlur={this.handleBlur}
+          placeholder="[section]"
+          spellCheck="false"
+          type="text"
+        />
       </h2>
-      <MarkdownArea name="ideas"
-                    value={this.props.ideas}
-                    onBlur={this.handleBlur}
-                    placeholder="[ideas]"/>
+      <MarkdownArea
+        name="ideas"
+        value={this.props.ideas}
+        onBlur={this.handleBlur}
+        placeholder="[ideas]"
+      />
     </div>
   }
 })

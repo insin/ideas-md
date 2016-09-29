@@ -47,10 +47,12 @@ var Gist = React.createClass({
         </span>}
         <p key="gist">
           <label>
-            Gist ID: <input value={gist}
-                            disabled={loading}
-                            onChange={this.handleEditGist}
-                            size="20"/>
+            Gist ID: <input
+              disabled={loading}
+              onChange={this.handleEditGist}
+              size="20"
+              value={gist}
+            />
           </label>
           {gist && <span>
             &nbsp;
@@ -64,10 +66,12 @@ var Gist = React.createClass({
         </p>
         {(!!token || gist === lastSuccessfulGist) && <p key="token">
           <label>
-            GitHub Access Token: <input value={token}
-                                        disabled={loading}
-                                        onChange={this.handleEditToken}
-                                        size="40"/>
+            GitHub Access Token: <input
+              disabled={loading}
+              onChange={this.handleEditToken}
+              size="40"
+              value={token}
+            />
           </label>
           {!token && <span>
             &nbsp;

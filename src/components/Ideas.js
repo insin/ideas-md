@@ -1,3 +1,4 @@
+/* global VERSION */
 require('./Ideas.css')
 
 var React = require('react')
@@ -91,17 +92,21 @@ var Ideas = React.createClass({
         </Button>
       </div>
       <div className="Ideas__general" key="general">
-        <MarkdownArea name="general"
-                      value={general}
-                      onBlur={this.handleEditGeneral}
-                      placeholder="[general]"/>
+        <MarkdownArea
+          name="general"
+          value={general}
+          onBlur={this.handleEditGeneral}
+          placeholder="[general]"
+        />
       </div>
       <div className="Ideas__sections" key="sections">
         {sections.map((section, i) =>
-          <Section {...section}
-                   actions={actions}
-                   isNew={section.id === newSectionId}
-                   key={section.id}/>
+          <Section
+            {...section}
+            actions={actions}
+            isNew={section.id === newSectionId}
+            key={section.id}
+          />
         )}
       </div>
       <footer>

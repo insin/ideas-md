@@ -24,16 +24,16 @@ var Button = React.createClass({
     }
   },
   render() {
-    var {active, className, onClick, tabIndex, ...props} = this.props
+    var {active, className, onClick, tabIndex, ...props} = this.props // eslint-disable-line no-unused-vars
     var classNames = ['Button']
     if (active) classNames.push('Button--active')
     if (className) classNames.push(className)
     return <span className={classNames.join(' ')}
-                 onClick={this.handleClick}
-                 onKeyPress={this.handleKeyPress}
-                 role="button"
-                 tabIndex={tabIndex}
-                 {...props}>
+      onClick={this.handleClick}
+      onKeyPress={this.handleKeyPress}
+      role="button"
+      tabIndex={tabIndex}
+      {...props}>
       {this.props.children}
     </span>
   }

@@ -4,7 +4,7 @@ var types = require('./types')
 var {uuid} = require('./utils')
 
 function findSectionIndex(sections, sectionId) {
-  for (var i = 0, l = sections.length; i < l ; i++) {
+  for (var i = 0, l = sections.length; i < l; i++) {
     if (sections[i].id === sectionId) return i
   }
   throw new Error(`Unknown section id: ${sectionId}`)
