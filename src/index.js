@@ -1,6 +1,3 @@
-require('es6-promise').polyfill()
-require('whatwg-fetch')
-
 require('codemirror/lib/codemirror.css')
 require('codemirror/theme/monokai.css')
 require('./app.css')
