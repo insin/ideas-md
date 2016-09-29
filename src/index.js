@@ -11,26 +11,20 @@ require('codemirror/mode/markdown/markdown')
 require('codemirror/mode/gfm/gfm')
 
 var React = require('react')
-var {applyMiddleware, bindActionCreators, createStore} = require('redux')
-var {Connector, Provider} = require('react-redux')
-var thunkMiddleware = require('redux-thunk')
+var {render} = require('react-dom')
+var {applyMiddleware, createStore} = require('redux')
+var {Provider} = require('react-redux')
+var thunkMiddleware = require('redux-thunk').default
 
 var Ideas = require('./components/Ideas')
-var actions = require('./actions')
 var reducer = require('./reducer')
 var {loadState} = require('./utils')
 
-var renderApp = ({dispatch, ...state}) =>
-  <Ideas {...state} actions={bindActionCreators(actions, dispatch)}/>
+var store = createStore(reducer, loadState(), applyMiddleware(thunkMiddleware))
 
-var select = state => state
-
-var renderConnector = () =>
-  <Connector select={select}>{renderApp}</Connector>
-
-var store = applyMiddleware(thunkMiddleware)(createStore)(reducer, loadState())
-
-React.render(
-  <Provider store={store}>{renderConnector}</Provider>,
+render(
+  <Provider store={store}>
+    <Ideas/>
+  </Provider>,
   document.getElementById('app')
 )

@@ -3,16 +3,22 @@ require('./Ideas.css')
 
 var React = require('react')
 var Octicon = require('react-octicon')
+var {connect} = require('react-redux')
+var {bindActionCreators} = require('redux')
 
 var Button = require('./Button')
 var Gist = require('./Gist')
 var MarkdownArea = require('./MarkdownArea')
-
 var Section = require('./Section')
+
+var actions = require('../actions')
 var {exportFile, storeState} = require('../utils')
 var {createMarkdown} = require('../markdown')
 
 var hasFileReader = 'FileReader' in window
+
+var mapStateToProps = (state) => state
+var mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch)
 
 var Ideas = React.createClass({
   getInitialState() {
@@ -28,7 +34,7 @@ var Ideas = React.createClass({
     window.addEventListener('beforeunload', this.handleBeforeUnload)
 
     if (!this.props.gist && window.location.hash.length === 21) {
-      this.props.actions.editGist(window.location.hash.substring(1))
+      this.props.editGist(window.location.hash.substring(1))
       if (!this.state.showGist) {
         this.setState({showGist: true})
       }
@@ -43,7 +49,7 @@ var Ideas = React.createClass({
   },
 
   handleAddSection(e) {
-    this.props.actions.addSection()
+    this.props.addSection()
   },
   handleBeforeUnload(e) {
     var {general, sections, exportFormat, gist, token} = this.props
@@ -58,11 +64,11 @@ var Ideas = React.createClass({
       return
     }
     var reader = new window.FileReader()
-    reader.onload = (e) => this.props.actions.importMarkdown(e.target.result)
+    reader.onload = (e) => this.props.importMarkdown(e.target.result)
     reader.readAsText(e.dataTransfer.files[0])
   },
   handleEditGeneral(e) {
-    this.props.actions.editGeneral(e.target.value)
+    this.props.editGeneral(e.target.value)
   },
   handleExport(e) {
     exportFile(createMarkdown(this.props), 'IDEAS.md')
@@ -72,7 +78,7 @@ var Ideas = React.createClass({
   },
 
   render() {
-    var {actions, general, newSectionId, sections} = this.props
+    var {general, newSectionId, sections} = this.props
     var {showGist} = this.state
     return <div className="Ideas">
       <div className="Ideas__tools">
@@ -103,7 +109,8 @@ var Ideas = React.createClass({
         {sections.map((section, i) =>
           <Section
             {...section}
-            actions={actions}
+            onEditSection={this.props.editSection}
+            onRemoveSection={this.props.removeSection}
             isNew={section.id === newSectionId}
             key={section.id}
           />
@@ -120,4 +127,4 @@ var Ideas = React.createClass({
   }
 })
 
-module.exports = Ideas
+module.exports = connect(mapStateToProps, mapDispatchToProps)(Ideas)

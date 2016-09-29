@@ -1,4 +1,3 @@
-var {action, optionsAction} = require('redux-action-utils')
 var types = require('./types')
 var {parseMarkdown} = require('./markdown')
 
@@ -84,10 +83,10 @@ module.exports = {
   importGist,
   importMarkdown,
   updateGist,
-  addSection: action(types.ADD_SECTION),
-  editGeneral: action(types.EDIT_GENERAL, 'general'),
-  editGist: action(types.EDIT_GIST, 'gist'),
-  editSection: optionsAction(types.EDIT_SECTION, 'id', 'change'),
-  editToken: action(types.EDIT_TOKEN, 'token'),
-  removeSection: action(types.REMOVE_SECTION, 'id')
+  addSection: () => ({type: types.ADD_SECTION}),
+  editGeneral: (general) => ({type: types.EDIT_GENERAL, general}),
+  editGist: (gist) => ({type: types.EDIT_GIST, gist}),
+  editSection: ({id, change}) => ({type: types.EDIT_SECTION, id, change}),
+  editToken: (token) => ({type: types.EDIT_TOKEN, token}),
+  removeSection: (id) => ({type: types.REMOVE_SECTION, id})
 }

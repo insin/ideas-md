@@ -1,4 +1,4 @@
-var update = require('react/lib/update')
+var update = require('react-addons-update')
 
 var types = require('./types')
 var {uuid} = require('./utils')

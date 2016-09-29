@@ -21,13 +21,14 @@
     "nwb": "0.12.2"
   },
   "dependencies": {
-    "codemirror": "^5.4.0",
-    "react": "^0.13.3",
-    "react-octicon": "^1.0.2",
-    "react-redux": "^0.2.1",
-    "redux": "^1.0.0-rc",
-    "redux-action-utils": "^1.0.0",
-    "redux-thunk": "^0.1.0"
+    "codemirror": "5.19.0",
+    "react": "15.3.2",
+    "react-addons-update": "15.3.2",
+    "react-dom": "15.3.2",
+    "react-octicon": "2.0.0",
+    "react-redux": "4.4.5",
+    "redux": "3.6.0",
+    "redux-thunk": "2.1.0"
   },
   "license": "MIT"
 }

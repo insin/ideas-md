@@ -10,7 +10,7 @@ var Section = React.createClass({
   handleBlur(e) {
     var {name, value} = e.target
     if (value !== this.props[name]) {
-      this.props.actions.editSection({
+      this.props.onEditSection({
         id: this.props.id,
         change: {[name]: value}
       })
@@ -18,7 +18,7 @@ var Section = React.createClass({
   },
   handleRemove(e) {
     if (window.confirm(`Delete ${this.props.section || '[section]'}?`)) {
-      this.props.actions.removeSection(this.props.id)
+      this.props.onRemoveSection(this.props.id)
     }
   },
   render() {

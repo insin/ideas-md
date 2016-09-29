@@ -15,16 +15,16 @@ var Gist = React.createClass({
     if (match) {
       gist = match[1]
     }
-    this.props.actions.editGist(gist)
+    this.props.editGist(gist)
   },
   handleEditToken(e) {
-    this.props.actions.editToken(e.target.value)
+    this.props.editToken(e.target.value)
   },
   handleImportGist() {
-    this.props.actions.importGist()
+    this.props.importGist()
   },
   handleUpdateGist(e) {
-    this.props.actions.updateGist(createMarkdown(this.props))
+    this.props.updateGist(createMarkdown(this.props))
   },
 
   render() {

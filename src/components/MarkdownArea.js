@@ -12,7 +12,7 @@ var MarkdownArea = React.createClass({
     value: React.PropTypes.string.isRequired
   },
   componentDidMount() {
-    this.cm = CodeMirror.fromTextArea(React.findDOMNode(this.refs.textarea), {
+    this.cm = CodeMirror.fromTextArea(this.textarea, {
       lineWrapping: true,
       mode: 'gfm',
       placeholder: this.props.placeholder,
@@ -35,7 +35,12 @@ var MarkdownArea = React.createClass({
   },
   render() {
     return <div className="MarkdownArea">
-      <textarea ref="textarea" name={this.props.name} defaultValue={this.props.value} autoComplete="off"/>
+      <textarea
+        autoComplete="off"
+        defaultValue={this.props.value}
+        name={this.props.name}
+        ref={(el) => { this.textarea = el }}
+      />
     </div>
   }
 })
